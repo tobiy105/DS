@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="text-center bg-info p-2 h4">Search NBA Team</div>
+                {% from "_formhelpers.html" import render_field %}
+
+                <form method="post" name="Teams">
+                    <p>
+                        {{ form.team }}<br>
+                    </p>
+                    <p><input type="submit" value ="Result"></p>
+                </form>
+
+                {% include '_messages.html' %}
+
+
+            </div>
+      <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}
