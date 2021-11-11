@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="text-center bg-info p-2 h4">{{full }}</div>
+                <h5 class="modal-title" style="text-align:center;" >Details about the {{full }} provided below. These details are provided by www.balldontlie.io.</h5>
+                <h5 class="modal-title" style="text-align:center;" >Team abbreviation: {{abbr }}</h5>
+                <h5 class="modal-title" style="text-align:center;" >Team city: {{city }}</h5>
+                <h5 class="modal-title" style="text-align:center;" >Team Conference: {{conf }}</h5>
+                <h5 class="modal-title" style="text-align:center;" >Team division: {{div }}</h5>
+                <h5 class="modal-title" style="text-align:center;" >Team short name: {{name }}</h5>
+                <p style="text-align:center;"><input type="submit" value ="Past Fixtures"></p>
+                {% include '_messages.html' %}
+
+
+            </div>
+      <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}
