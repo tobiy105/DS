@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="text-center bg-info p-2 h4">NBA Team</div>
+                <h5 class="modal-title" >{{abbr }}</h5>
+                <h5 class="modal-title" >{{city }}</h5>
+                <h5 class="modal-title" >{{conf }}</h5>
+                <h5 class="modal-title" >{{div }}</h5>
+                <h5 class="modal-title" >{{full }}</h5>
+                <h5 class="modal-title" >{{name }}</h5>
+                {% include '_messages.html' %}
+
+
+            </div>
+      <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}
