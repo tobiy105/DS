@@ -8,12 +8,18 @@
                 <div class="text-center bg-info p-2 h4">{{full }}</div>
                 <h5 class="modal-title" style="text-align:center;" >Details for the fixtures for the {{full }} provided below. These details are provided by www.balldontlie.io.</h5>
                 {% for x in games %}
-                <h5 class="modal-title" style="text-align:center;" >Home Team: {{ x }}</h5>
-                <h5 class="modal-title" style="text-align:center;" >Visitor Team: {{ x }}</h5>
-                <h5 class="modal-title" style="text-align:center;" >Date of Game: {{ x }}</h5>
-                <h5 class="modal-title" style="text-align:center;" >Home Team Score: {{ x }}</h5>
-                <h5 class="modal-title" style="text-align:center;" >Visitor Team Score: {{ x }}</h5>
-                <p style="text-align:center;"><input type="submit" value ="Post about game"></p>
+                    {% if %}
+                        <h5 class="modal-title" style="text-align:center;" >Home Team: {{ x }}</h5>
+                    {% elif %}
+                        <h5 class="modal-title" style="text-align:center;" >Visitor Team: {{ x }}</h5>
+                    {% elif %}
+                        <h5 class="modal-title" style="text-align:center;" >Date of Game: {{ x }}</h5>
+                    {% elif %}
+                        <h5 class="modal-title" style="text-align:center;" >Home Team Score: {{ x }}</h5>
+                    {% elif %}
+                        <h5 class="modal-title" style="text-align:center;" >Visitor Team Score: {{ x }}</h5>
+                        <p style="text-align:center;"><input type="submit" value ="Post about game"></p>
+                    {% endif %}
                 {% endfor %}
                 {% include '_messages.html' %}
 
