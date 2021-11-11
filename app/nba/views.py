@@ -64,12 +64,11 @@ def fixtures(teamAsked):
             games.append(fixturesRetrieved['data'][incr]['home_team_score'])
             games.append(fixturesRetrieved['data'][incr]['visitor_team_score'])
             if fixturesRetrieved['data'][incr]['home_team_score'] < fixturesRetrieved['data'][incr]['visitor_team_score']:
-                games.append(fixturesRetrieved['data'][incr]['visitor_team']['name'])
+                games.append('Winning Team: ' + fixturesRetrieved['data'][incr]['visitor_team']['name'])
             else:
-                games.append(fixturesRetrieved['data'][incr]['home_team']['name'])
+                games.append('Winning Team: ' + fixturesRetrieved['data'][incr]['home_team']['name'])
             incr += 1
             amount += 1
         else:
             incr += 1
-    flash(games)
     return render_template('fixtures.html',games=games,amount=amount)

@@ -7,18 +7,22 @@
             <div class="col-md-10">
                 <div class="text-center bg-info p-2 h4">{{full }}</div>
                 <h5 class="modal-title" style="text-align:center;" >Details for the fixtures for the {{full }} provided below. These details are provided by www.balldontlie.io.</h5>
+                <br>
                 {% for x in games %}
-                    {% if %}
+                    {% if x == games[0] or x == games[6] or x == games[12] or x == games[18]%}
                         <h5 class="modal-title" style="text-align:center;" >Home Team: {{ x }}</h5>
-                    {% elif %}
+                    {% elif x == games[1] or x == games[7] or x == games[13] or x == games[19]%}
                         <h5 class="modal-title" style="text-align:center;" >Visitor Team: {{ x }}</h5>
-                    {% elif %}
+                    {% elif x == games[2] or x == games[8] or x == games[14] or x == games[20]%}
                         <h5 class="modal-title" style="text-align:center;" >Date of Game: {{ x }}</h5>
-                    {% elif %}
+                    {% elif x == games[3] or x == games[9] or x == games[15] or x == games[21]%}
                         <h5 class="modal-title" style="text-align:center;" >Home Team Score: {{ x }}</h5>
-                    {% elif %}
+                    {% elif x == games[4] or x == games[10] or x == games[16] or x == games[22]%}
                         <h5 class="modal-title" style="text-align:center;" >Visitor Team Score: {{ x }}</h5>
+                    {% elif x == games[5] or x == games[11] or x == games[17] or x == games[23]%}
+                        <h5 class="modal-title" style="text-align:center;" >{{ x }}</h5>
                         <p style="text-align:center;"><input type="submit" value ="Post about game"></p>
+                        <br>
                     {% endif %}
                 {% endfor %}
                 {% include '_messages.html' %}
