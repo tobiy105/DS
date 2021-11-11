@@ -25,4 +25,5 @@ def retrieved(teamAsked):
             div = finder['division']
             full = finder['full_name']
             name = finder['name']
+            break
     return render_template('retrieved.html',abbr=abbr,city=city,conf=conf,div=div,full=full,name=name)
