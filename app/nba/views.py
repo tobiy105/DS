@@ -1,12 +1,14 @@
-from flask import Flask,render_template,session, request,redirect,url_for,flash
-from app import app
+from flask import Flask,render_template,session,request,redirect,url_for,flash,Blueprint,abort,jsonify
+from flask.views import MethodView
+from app import app, db
+from app.nba.models import Team
 from .forms import TeamSearchForm
 import json
 import requests
 import sys
-
+team = Blueprint('Team', __name__)
 #route for team search
-@app.route('/team', methods=['GET','POST'])
+@app.route('/', methods=['GET','POST'])
 def team():
     form = TeamSearchForm(request.form)
     if request.method == "POST":
@@ -33,6 +35,7 @@ def retrieved(teamAsked):
             full = teamsRetrieved['data'][check]['full_name']
             name = teamsRetrieved['data'][check]['name']
             break
+            return redirect(url_for('fixtures', teamAsked=teamsRetrieved))
         else:
             check += 1
     return render_template('retrieved.html',abbr=abbr,city=city,conf=conf,div=div,full=full,name=name)
@@ -72,3 +75,46 @@ def fixtures(teamAsked):
         else:
             incr += 1
     return render_template('fixtures.html',games=games,amount=amount)
+
+class NBA_Teams(MethodView):
+    def get(self, id=None, page=1):
+        if not id:
+            teams = Team.query.paginate(page, 10).items
+            res = {}
+            for team in teams:
+                res[team.id] = {
+                    'name': team.name,
+                }
+        else:
+            team = Team.query.filter_by(id=id).first()
+            if not team:
+                abort(404)
+            res = {
+                'name': team.name,
+            }
+        return jsonify(res)
+
+    def post(self):
+        name = requests.form.get('name')
+        team = Team(name)
+        db.session.add(team)
+        db.session.commit()
+        return jsonify({team.id: {
+            'name': team.name,
+        }})
+
+    def put(self, id):
+        return
+
+    def delete(self, id):
+        return
+
+
+team_view = NBA_Teams.as_view('team_view')
+app.add_url_rule(
+    '/team/', view_func=team_view, methods=['GET', 'POST']
+)
+app.add_url_rule(
+    '/team/<int:id>', view_func=team_view, methods=['GET']
+)
+
