@@ -90,7 +90,7 @@ def get_team_by_id(id):
     return jsonify(return_value)
 
 # route to all nba teams
-@app.route('/teams', methods=['POST'])
+@app.route('/nba_teams', methods=['POST'])
 def add_nba_teams():
     '''Function to add new team to our database'''
     req = requests.get('https://www.balldontlie.io/api/v1/teams')
