@@ -1,4 +1,4 @@
-from flask import Flask,render_template,session,request,redirect,url_for,flash,Blueprint,abort,jsonify
+from flask import Flask,render_template,session,request,redirect,url_for,flash,Blueprint,abort,jsonify,Response
 from flask.views import MethodView
 from app import app, db
 from app.nba.models import Team
@@ -76,45 +76,70 @@ def fixtures(teamAsked):
             incr += 1
     return render_template('fixtures.html',games=games,amount=amount)
 
-class NBA_Teams(MethodView):
-    def get(self, id=None, page=1):
-        if not id:
-            teams = Team.query.paginate(page, 10).items
-            res = {}
-            for team in teams:
-                res[team.id] = {
-                    'name': team.name,
-                }
-        else:
-            team = Team.query.filter_by(id=id).first()
-            if not team:
-                abort(404)
-            res = {
-                'name': team.name,
-            }
-        return jsonify(res)
-
-    def post(self):
-        name = requests.form.get('name')
-        team = Team(name)
-        db.session.add(team)
-        db.session.commit()
-        return jsonify({team.id: {
-            'name': team.name,
-        }})
-
-    def put(self, id):
-        return
-
-    def delete(self, id):
-        return
+# route to get all teams
+@app.route('/teams', methods=['GET'])
+def get_teams():
+    '''Function to get all the teams in the database'''
+    return jsonify({'Teams': Team.get_all_teams()})
 
 
-team_view = NBA_Teams.as_view('team_view')
-app.add_url_rule(
-    '/team/', view_func=team_view, methods=['GET', 'POST']
-)
-app.add_url_rule(
-    '/team/<int:id>', view_func=team_view, methods=['GET']
-)
+# route to get team by id
+@app.route('/teams/<int:id>', methods=['GET'])
+def get_team_by_id(id):
+    return_value = Team.get_team(id)
+    return jsonify(return_value)
+
+# route to all nba teams
+@app.route('/teams', methods=['POST'])
+def add_nba_teams():
+    '''Function to add new team to our database'''
+    req = requests.get('https://www.balldontlie.io/api/v1/teams')
+    teamsRetrieved = json.loads(req.content)
+    insert = 0
+    while insert < 30:
+        abbr = teamsRetrieved['data'][insert]['abbreviation']
+        city = teamsRetrieved['data'][insert]['city']
+        conf = teamsRetrieved['data'][insert]['conference']
+        div = teamsRetrieved['data'][insert]['division']
+        full = teamsRetrieved['data'][insert]['full_name']
+        name = teamsRetrieved['data'][insert]['name']
+        Team.add_team(name=name, full_name=full, abbreviation=abbr, city=city, conference=conf, division=div)
+        insert += 1
+
+    response = Response("NBA Teams added", 201, mimetype='application/json')
+    return response
+
+
+# route to add new team
+@app.route('/teams', methods=['POST'])
+def add_team():
+    '''Function to add new team to our database'''
+    request_data = request.get_json()  # getting data from client
+    Team.add_team(request_data["name"], request_data['full_name'],
+                  request_data['abbr'], request_data['city'],
+                  request_data['conf'], request_data['div'])
+    response = Response("Team added", 201, mimetype='application/json')
+    return response
+
+
+# route to update team with PUT method
+@app.route('/teams/<int:id>', methods=['PUT'])
+def update_team(id):
+    '''Function to edit team in our database using team id'''
+    request_data = request.get_json()
+    Team.update_team(id, request_data['name'], request_data['full_name'],
+                     request_data['abbr'], request_data['city'],
+                     request_data['conf'], request_data['div'])
+    response = Response("Team Updated", status=200, mimetype='application/json')
+    return response
+
+
+# route to delete team using the DELETE method
+@app.route('/teams/<int:id>', methods=['DELETE'])
+def remove_team(id):
+    '''Function to delete team from our database'''
+    Team.delete_team(id)
+    response = Response("Team Deleted", status=200, mimetype='application/json')
+    return response
+
 
