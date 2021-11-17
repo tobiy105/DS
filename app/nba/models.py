@@ -1,5 +1,4 @@
 from app import db
-from flask import Flask, request, Response, jsonify
 
 # class Team(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
@@ -21,9 +20,6 @@ class Team(db.Model):
     conf = db.Column(db.String(255))
     div = db.Column(db.String(255))
 
-    # players = db.relationship('Player', backref='team', lazy='select')
-
-
     def json(self):
         return {'id': self.id, 'name': self.name,
                 'full_name': self.full_name, 'abbr': self.abbr, 'city': self.city,
@@ -39,7 +35,7 @@ class Team(db.Model):
         db.session.add(new_team)  # add new team to database session
         db.session.commit()  # commit changes to session
 
-    def get_all_teams():
+    def get_all_teams(self):
         '''function to get all teams in our database'''
         return [Team.json(team) for team in Team.query.all()]
 
@@ -69,5 +65,29 @@ class Team(db.Model):
         Team.query.filter_by(id=_id).delete()
         # filter by id and delete
         db.session.commit()  # commiting the new change to our database
+
+class Players(db.Model): 
+    id = db.Column(db.Integer, primary_key=True)
+#    player_id = db.Column(db.Integer)
+    first_name = db.Column(db.String(255))
+    last_name = db.Column(db.String(255))
+    position = db.Column(db.String(255))
+    height_feet = db.Column(db.Integer)
+    height_inches = db.Column(db.Integer)
+    weight_pounds = db.Column(db.Integer)
+    team_id = db.Column(db.Integer)
+    team_abbreviation = db.Column(db.String(255))
+    team_city = db.Column(db.String(255))
+    team_conference = db.Column(db.String(255))
+    team_division = db.Column(db.String(255))
+    team_full_name = db.Column(db.String(255))
+    team_name = db.Column(db.String(255))
+
+    def json(self):
+        return {'id': self.id, 'name': self.name,
+                'full_name': self.full_name, 'abbr': self.abbr, 'city': self.city,
+                'conf': self.conf, 'div': self.div}
+        # this method we are defining will convert our output to json
+    
 
 db.create_all()
