@@ -1,4 +1,5 @@
 from app import db
+from flask import Flask, request, Response, jsonify
 
 # class Team(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
@@ -20,7 +21,7 @@ class Team(db.Model):
     conf = db.Column(db.String(255))
     div = db.Column(db.String(255))
 
-    players = db.relationship('Player', backref='team', lazy='select')
+    # players = db.relationship('Player', backref='team', lazy='select')
 
 
     def json(self):
@@ -38,7 +39,7 @@ class Team(db.Model):
         db.session.add(new_team)  # add new team to database session
         db.session.commit()  # commit changes to session
 
-    def get_all_teams(self):
+    def get_all_teams():
         '''function to get all teams in our database'''
         return [Team.json(team) for team in Team.query.all()]
 
@@ -68,3 +69,5 @@ class Team(db.Model):
         Team.query.filter_by(id=_id).delete()
         # filter by id and delete
         db.session.commit()  # commiting the new change to our database
+
+db.create_all()
