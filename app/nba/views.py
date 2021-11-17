@@ -108,9 +108,10 @@ class Add_NBA_teams(Resource):
             div = teamsRetrieved['data'][insert]['division']
             full = teamsRetrieved['data'][insert]['full_name']
             name = teamsRetrieved['data'][insert]['name']
-            new_team = Team(name=name, full_name=full, abbr=abbr, city=city, conf=conf, div=div)
-            db.session.add(new_team)  # add new team to database session
-            db.session.commit()  # commit changes to session
+            Team.add_team(name, full, abbr, city, conf, div)
+            # new_team = Team(name=name, full_name=full, abbr=abbr, city=city, conf=conf, div=div)
+            # db.session.add(new_team)  # add new team to database session
+            # db.session.commit()  # commit changes to session
             insert += 1
 
         response = Response("NBA Teams added", 201, mimetype='application/json')
@@ -123,11 +124,14 @@ class Add_team(Resource):
     def post(self):
         '''Function to add new team to our database'''
         request_data = request.get_json()  # getting data from client
-        new_team = Team(name=request_data["name"], full_name=request_data['full_name'],
-                      abbr=request_data['abbr'], city=request_data['city'],
-                      conf=request_data['conf'], div=request_data['div'])
-        db.session.add(new_team)  # add new team to database session
-        db.session.commit()  # commit changes to session
+        Team.add_team(request_data["name"], request_data['full_name'],
+             request_data['abbr'], request_data['city'],
+             request_data['conf'], request_data['div'])
+        # new_team = Team(name=request_data["name"], full_name=request_data['full_name'],
+        #               abbr=request_data['abbr'], city=request_data['city'],
+        #               conf=request_data['conf'], div=request_data['div'])
+        # db.session.add(new_team)  # add new team to database session
+        # db.session.commit()  # commit changes to session
         response = Response("Team added", 201, mimetype='application/json')
         return response
 
@@ -151,7 +155,7 @@ class test_add_team(Resource):
 # route to update team with PUT method
 # @app.route('/teams/<int:id>', methods=['PUT'])
 class Update_Team(Resource):
-    def get(id):
+    def get(request, id):
         '''Function to edit team in our database using team id'''
         Team.query.get_or_404(id)
         request_data = request.get_json()
@@ -165,7 +169,7 @@ class Update_Team(Resource):
 # route to delete team using the DELETE method
 # @app.route('/teams/<int:id>', methods=['DELETE'])
 class Remove_Team(Resource):
-    def get(id):
+    def get(request, id):
         '''Function to delete team from our database'''
         Team.query.get_or_404(id)
         Team.delete_team(id)

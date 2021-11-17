@@ -31,11 +31,11 @@ class Team(db.Model):
         # this method we are defining will convert our output to json
 
 
-    def add_team(_name):
+    def add_team(_name, _full_name, _abbr, _city, _conf, _div):
         '''function to add team to database using _title, _year, _genre
         as parameters'''
         # creating an instance of our Team constructor
-        new_team = Team(name=_name)
+        new_team = Team(name=_name, full_name=_full_name, abbr=_abbr, city=_city, conf=_conf, div=_div)
         db.session.add(new_team)  # add new team to database session
         db.session.commit()  # commit changes to session
 
