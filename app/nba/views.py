@@ -6,8 +6,19 @@ from app.nba.models import Team
 from .forms import TeamSearchForm
 import json
 import requests
+import facebook as fb
 import sys
+access_token = "EAAROH8QxC4kBAMDTP87iB8fTF9eA5HEvxgpN8kX7EkAU2ZCDvGsZBvtw7VTCpmAVqZATxVPwIVaDyLopmG44WR9s4dQlqDrz2ZBcTeCFetsg3V5nlv68EyV8LEavCJzcqY0lkW2lAXh1KyHTH4WB4ZCOW8MHWToWsAkIpVrQDpXCQowsO2cC5BEQUkJfzMLj6GxGlWN9PZCIJL1yPkfepd"
+app_token = "1211798249343881|KhzuT0HWz0rtTwbgbKxBFFB4uxc"
 team = Blueprint('Team', __name__)
+
+#route for team search
+@app.route('/nba_post', methods=['GET','POST'])
+def nba_post():
+    nba_p = fb.GraphAPI(access_token)
+    nba_p.put_object("me", "feed", message = "Hello welcome to my NBA Page")
+    response = Response("Posted on the Facebook page", status=200)
+    return response
 #route for team search
 @app.route('/', methods=['GET','POST'])
 def team():
@@ -88,7 +99,7 @@ class Get_Teams(Resource):
 # route to get team by id
 # @app.route('/teams/<int:id>', methods=['GET'])
 class Get_Team_By_Id(Resource):
-    def get(request, id):
+    def get(request, ideed):
         return_value = Team.query.get_or_404(id)
 
         return jsonify(return_value.name)
