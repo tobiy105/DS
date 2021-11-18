@@ -9,8 +9,10 @@ app.config.from_object('config')
 db = SQLAlchemy(app)
 api = Api(app)
 from app.nba import views
-from app.nba.views import Get_Teams, Get_Team_By_Id, Add_team, Add_NBA_teams, Remove_Team, Full_Player_List, Team_Player_List, Specific_Player #Update_Team
-
+from app.team_api import views
+from app.player_api import views
+from app.team_api.views import Get_Teams, Get_Team_By_Id, Add_team, Add_NBA_teams, Remove_Team #Update_Team
+from app.player_api.views import Full_Player_List, Team_Player_List, Specific_Player
 api.add_resource(Get_Teams, '/get_team')
 api.add_resource(Get_Team_By_Id, '/get_team_by_id/<int:id>')
 api.add_resource(Add_team, '/add_team')
