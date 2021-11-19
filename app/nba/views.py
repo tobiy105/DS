@@ -67,7 +67,29 @@ def fixtures(teamAsked):
     players = playersRetrieved['data']
     return render_template('players.html',players=players)
 
-    playerdata = {'data':[
+def database_check():
+    checker = models.Players.query.get(1)
+    if checker is None:
+        iteration = 0
+        while iteration < 9999:
+            if playerdata['data'][iteration]['first_name'] is None:
+                break
+            first_name = playerdata['data'][iteration]['first_name']
+            last_name = playerdata['data'][iteration]['last_name']
+            number = playerdata['data'][iteration]['number']
+            position = playerdata['data'][iteration]['position']
+            height_feet = playerdata['data'][iteration]['height_feet']
+            height_inches = playerdata['data'][iteration]['height_inches']
+            weight_pounds = playerdata['data'][iteration]['weight_pounds']
+            team_full_name = playerdata['data'][iteration]['team_full_name']
+            team_name = playerdata'data'][iteration]['team_name']
+            add_player = models.Players(first_name=first_name,last_name=last_name,number=number,position=position,height_feet=height_feet,height_inches=height_inches,weight_pounds=weight_pounds,team_full_name=team_full_name,team_name=team_name)
+            db.session.add(add_player)
+            db.session.commit()
+            iteration += 1
+    return
+
+playerdata = {'data':[
     {'first_name':'JAYLEN','last_name':'BROWN','number':7,'position':'G/F','height_feet':6,'height_inches':6,'weight_pounds':223,'team_name':'Celtics','team_full_name':'Boston Celtics'},
     {'first_name':'BRUNO','last_name':'FERNANDO','number':28,'position':'F/C','height_feet':6,'height_inches':9,'weight_pounds':240,'team_name':'Celtics','team_full_name':'Boston Celtics'},
     {'first_name':'SAM','last_name':'HAUSER','number':30,'position':'F','height_feet':6,'height_inches':7,'weight_pounds':217,'team_name':'Celtics','team_full_name':'Boston Celtics'},
